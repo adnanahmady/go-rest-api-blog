@@ -1,0 +1,11 @@
+app:
+  name: go-rest-api-blog
+  version: 1.0.0
+  env: local
+  port: 8080
+  log:
+    level: debug
+    dir: ./logs
+    max_age: 30
+  database:
+    path: ./blog.db
