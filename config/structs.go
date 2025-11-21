@@ -32,6 +32,7 @@ type DatabaseConfig struct {
 func mapToStructs() {
 	loadEnvToStruct("app.name", "APP_NAME")
 	loadEnvToStruct("app.env", "APP_ENV")
+	loadEnvToStruct("app.host", "APP_HOST")
 	loadEnvToStruct("app.port", "APP_PORT")
 	loadEnvToStruct("log.level", "LOG_LEVEL")
 	loadEnvToStruct("log.dir", "LOG_DIR")

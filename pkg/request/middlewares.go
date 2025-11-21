@@ -33,7 +33,7 @@ func newWriter(
 	w http.ResponseWriter,
 ) *appWriter {
 	return &appWriter{
-		lgr: lgr,
+		lgr:            lgr,
 		ResponseWriter: w,
 		statusCode:     200,
 	}

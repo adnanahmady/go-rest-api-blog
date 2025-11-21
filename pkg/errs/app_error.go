@@ -8,7 +8,7 @@ import (
 var _ error = (*AppError)(nil)
 
 type AppError struct {
-	Code    int `json:"-"`
+	Code    int    `json:"-"`
 	Message string `json:"message"`
 	Errors  Errors `json:"errors"`
 }

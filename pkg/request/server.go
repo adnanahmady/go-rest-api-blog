@@ -8,8 +8,10 @@ import (
 	"time"
 
 	"github.com/adnanahmady/go-rest-api-blog/config"
+	_ "github.com/adnanahmady/go-rest-api-blog/docs"
 	"github.com/adnanahmady/go-rest-api-blog/pkg/applog"
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 type Router interface {
@@ -27,14 +29,19 @@ func NewServer(cfg *config.Config, lgr applog.Logger) *ServerImpl {
 	return &ServerImpl{
 		cfg:    cfg,
 		lgr:    lgr,
-		mux:    prepareFramework(lgr),
+		mux:    prepareFramework(cfg, lgr),
 		server: &http.Server{},
 	}
 }
 
-func prepareFramework(lgr applog.Logger) *chi.Mux {
+func prepareFramework(cfg *config.Config, lgr applog.Logger) *chi.Mux {
 	mux := chi.NewMux()
 	mux.Use(NewMiddlewares(lgr)...)
+
+	mux.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL(fmt.Sprintf("http://%s:%d/swagger/doc.json", cfg.App.Host, cfg.App.Port)),
+	))
+
 	return mux
 }
 

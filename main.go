@@ -9,6 +9,14 @@ import (
 	"github.com/adnanahmady/go-rest-api-blog/internal"
 )
 
+// @title Go Rest API Blog
+// @version 1.0.0
+// @description Go Rest API Blog
+// @contact.name Adnan Ahmady
+// @contact.email adnanahmady@gmail.com
+// @contact.url https://github.com/adnanahmady
+// @license.name MIT License
+// @license.url https://opensource.org/licenses/MIT
 func main() {
 	ctx := context.Background()
 	ctx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)

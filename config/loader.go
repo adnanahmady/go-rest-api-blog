@@ -31,8 +31,8 @@ func GetConfig() *Config {
 func loadDotEnvFile() {
 	root := app.GetRootPath()
 	if err := godotenv.Load(
-		root + "/.env.testing",
-		root + "/.env",
+		root+"/.env.testing",
+		root+"/.env",
 	); err != nil {
 		log.Fatalf("failed to load .env file: %v", err)
 	}

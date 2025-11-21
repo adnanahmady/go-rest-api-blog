@@ -3,7 +3,7 @@ package domain
 import "time"
 
 type Post struct {
-	ID        uint    `db:"id"`
+	ID        uint      `db:"id"`
 	Title     string    `db:"title"`
 	Content   string    `db:"content"`
 	CreatedAt time.Time `db:"created_at"`

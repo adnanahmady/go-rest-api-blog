@@ -1,0 +1,265 @@
+definitions:
+  application.PaginationDTO:
+    properties:
+      page:
+        type: integer
+      per_page:
+        type: integer
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  errs.AppError:
+    properties:
+      errors:
+        $ref: '#/definitions/errs.Errors'
+      message:
+        type: string
+    type: object
+  errs.Errors:
+    additionalProperties:
+      type: string
+    type: object
+  presentation.PostResource:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  presentation.SavePostRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  response.JsonResponse:
+    properties:
+      data: {}
+      meta: {}
+    type: object
+info:
+  contact:
+    email: adnanahmady@gmail.com
+    name: Adnan Ahmady
+    url: https://github.com/adnanahmady
+  description: Go Rest API Blog
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  title: Go Rest API Blog
+  version: 1.0.0
+paths:
+  /posts:
+    get:
+      consumes:
+      - application/json
+      description: List all posts
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Per page
+        in: query
+        name: per_page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/presentation.PostResource'
+                meta:
+                  additionalProperties:
+                    allOf:
+                    - {}
+                    - properties:
+                        pagination:
+                          $ref: '#/definitions/application.PaginationDTO'
+                      type: object
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.AppError'
+      summary: List all posts
+      tags:
+      - posts
+    post:
+      consumes:
+      - application/json
+      description: Create a new post
+      parameters:
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/presentation.SavePostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/presentation.PostResource'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.AppError'
+      summary: Create a new post
+      tags:
+      - posts
+  /posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.AppError'
+      summary: Delete a post
+      tags:
+      - posts
+    get:
+      consumes:
+      - application/json
+      description: Show a post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/presentation.PostResource'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.AppError'
+      summary: Show a post
+      tags:
+      - posts
+    put:
+      consumes:
+      - application/json
+      description: Update a post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/presentation.SavePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.JsonResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/presentation.PostResource'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/errs.AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.AppError'
+      summary: Update a post
+      tags:
+      - posts
+swagger: "2.0"

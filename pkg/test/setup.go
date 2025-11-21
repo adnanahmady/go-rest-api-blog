@@ -52,7 +52,7 @@ func (s *testServer) jsonRequest(
 
 	var responseBody any
 	_ = json.Unmarshal(buffer, &responseBody)
-	
+
 	return recorder, responseBody
 }
 

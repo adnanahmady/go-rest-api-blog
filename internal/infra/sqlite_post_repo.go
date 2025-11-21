@@ -29,7 +29,7 @@ func (r *SqlitePostRepository) Create(
 	lgr := request.GetLogger(ctx)
 
 	var dbName string
-	err := r.dbm.GetClient().GetContext(ctx, &dbName,`
+	err := r.dbm.GetClient().GetContext(ctx, &dbName, `
 	PRAGMA database_list; select name from pragma_database_list limit 1`)
 	if err != nil {
 		lgr.Error("failed to get database name", err)
@@ -50,7 +50,7 @@ func (r *SqlitePostRepository) Create(
 
 func (r *SqlitePostRepository) GetByID(
 	ctx context.Context,
-	 id uint,
+	id uint,
 ) (*domain.Post, error) {
 	var post domain.Post
 	query := `SELECT * FROM posts WHERE id = ?`

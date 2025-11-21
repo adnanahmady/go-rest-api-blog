@@ -37,6 +37,17 @@ func NewV1Handlers(
 	}
 }
 
+// @Summary Create a new post
+// @Description Create a new post
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param post body SavePostRequest true "Post data"
+// @Success 201 {object} response.JsonResponse{data=PostResource}
+// @Failure 400 {object} errs.AppError
+// @Failure 422 {object} errs.AppError
+// @Failure 500 {object} errs.AppError
+// @Router /posts [post]
 func (h *V1Handlers) CreatePost(w http.ResponseWriter, r *http.Request) {
 	lgr := request.GetLogger(r.Context())
 
@@ -72,6 +83,17 @@ func (h *V1Handlers) CreatePost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response.NewJsonResponse(res, nil))
 }
 
+// @Summary List all posts
+// @Description List all posts
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param page query int true "Page number"
+// @Param per_page query int true "Per page"
+// @Success 200 {object} response.JsonResponse{data=PostResource,meta=map[string]any{pagination=application.PaginationDTO}}
+// @Failure 400 {object} errs.AppError
+// @Failure 500 {object} errs.AppError
+// @Router /posts [get]
 func (h *V1Handlers) ListPosts(w http.ResponseWriter, r *http.Request) {
 	lgr := request.GetLogger(r.Context())
 
@@ -106,6 +128,17 @@ func (h *V1Handlers) ListPosts(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
+// @Summary Show a post
+// @Description Show a post
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param id path int true "Post ID"
+// @Success 200 {object} response.JsonResponse{data=PostResource}
+// @Failure 400 {object} errs.AppError
+// @Failure 404 {object} errs.AppError
+// @Failure 500 {object} errs.AppError
+// @Router /posts/{id} [get]
 func (h *V1Handlers) ShowPost(w http.ResponseWriter, r *http.Request) {
 	lgr := request.GetLogger(r.Context())
 
@@ -134,6 +167,18 @@ func (h *V1Handlers) ShowPost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response.NewJsonResponse(res, nil))
 }
 
+// @Summary Update a post
+// @Description Update a post
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param id path int true "Post ID"
+// @Param post body SavePostRequest true "Post data"
+// @Success 200 {object} response.JsonResponse{data=PostResource}
+// @Failure 400 {object} errs.AppError
+// @Failure 422 {object} errs.AppError
+// @Failure 500 {object} errs.AppError
+// @Router /posts/{id} [put]
 func (h *V1Handlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	lgr := request.GetLogger(r.Context())
 
@@ -175,6 +220,17 @@ func (h *V1Handlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response.NewJsonResponse(res, nil))
 }
 
+// @Summary Delete a post
+// @Description Delete a post
+// @Tags posts
+// @Accept json
+// @Produce json
+// @Param id path int true "Post ID"
+// @Success 204 {object} response.JsonResponse{data=nil}
+// @Failure 400 {object} errs.AppError
+// @Failure 404 {object} errs.AppError
+// @Failure 500 {object} errs.AppError
+// @Router /posts/{id} [delete]
 func (h *V1Handlers) DeletePost(w http.ResponseWriter, r *http.Request) {
 	lgr := request.GetLogger(r.Context())
 

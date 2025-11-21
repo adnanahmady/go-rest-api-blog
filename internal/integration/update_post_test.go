@@ -26,7 +26,7 @@ func TestUpdatePost(t *testing.T) {
 		assert.NoError(t, err)
 		url := fmt.Sprintf("/v1/posts/%d", post.ID)
 		data := testData{
-			Title: "Test Post",
+			Title:   "Test Post",
 			Content: "Test Content",
 		}
 
@@ -53,7 +53,7 @@ func TestUpdatePost(t *testing.T) {
 		assert.NoError(t, err)
 		url := fmt.Sprintf("/v1/posts/%d", post.ID)
 		data := testData{
-			Title: "Test Post",
+			Title:   "Test Post",
 			Content: "Test Content",
 		}
 
@@ -67,29 +67,29 @@ func TestUpdatePost(t *testing.T) {
 	vals := []struct {
 		name string
 		data testData
-		exp int
+		exp  int
 		errs map[string]any
 	}{
 		{
 			name: "given data when title is empty then return error",
 			data: testData{
-				Title: "",
+				Title:   "",
 				Content: "Test Content",
 			},
 			exp: http.StatusUnprocessableEntity,
 			errs: map[string]any{
-					"title": "title is required",
+				"title": "title is required",
 			},
 		},
 		{
 			name: "given data when content is empty then return error",
 			data: testData{
-				Title: "Test Post",
+				Title:   "Test Post",
 				Content: "",
 			},
 			exp: http.StatusUnprocessableEntity,
 			errs: map[string]any{
-					"content": "content is required",
+				"content": "content is required",
 			},
 		},
 	}
