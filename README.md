@@ -1,6 +1,7 @@
 # go-rest-api-blog
 
-A simple RESTful API for a blog, built with Go, Chi, and SQLite.
+A simple RESTful API for a blog, built with **Go**, **Chi**, and **SQLite** as the database.
+written with the **Clean architecture** design folowed by **TDD** approach.
 
 ## Index
 * [Run the application](#run-the-application)
