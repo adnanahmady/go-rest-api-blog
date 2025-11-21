@@ -1,6 +1,5 @@
 app:
   name: go-rest-api-blog
-  version: 1.0.0
   env: local
   port: 8080
   log:

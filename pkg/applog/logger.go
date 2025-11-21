@@ -30,16 +30,18 @@ type AppLog struct {
 
 func NewLog(cfg *config.Config) *AppLog {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	writers := make([]io.Writer, 2)
-	writers[0] = zerolog.ConsoleWriter{Out: os.Stdout}
-	writers[1] = &lumberjack.Logger{
-		Filename: filepath.Join(
-			filepath.Join(app.GetRootPath(), cfg.Log.Dir),
-			fmt.Sprintf("request-%s.log", time.Now().Format("2006-01-02")),
-		),
-		MaxSize:  3000, // 3GB
-		MaxAge:   cfg.Log.MaxAge,
-		Compress: true,
+	writers := make([]io.Writer, 0, 2)
+	writers = append(writers, zerolog.ConsoleWriter{Out: os.Stdout})
+	if !cfg.App.IsTesting() {
+		writers = append(writers, &lumberjack.Logger{
+			Filename: filepath.Join(
+				filepath.Join(app.GetRootPath(), cfg.Log.Dir),
+				fmt.Sprintf("request-%s.log", time.Now().Format("2006-01-02")),
+			),
+			MaxSize:  3000, // 3GB
+			MaxAge:   cfg.Log.MaxAge,
+			Compress: true,
+		})
 	}
 	ml := zerolog.MultiLevelWriter(writers...)
 	level := getLevel(cfg.Log.Level)

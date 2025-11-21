@@ -19,6 +19,10 @@ type AppConfig struct {
 	Port int    `mapstructure:"port"`
 }
 
+func (c *AppConfig) IsTesting() bool {
+	return c.Env == "testing"
+}
+
 type LogConfig struct {
 	Level  string `mapstructure:"level"`
 	Dir    string `mapstructure:"dir"`
