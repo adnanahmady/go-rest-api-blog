@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/adnanahmady/go-rest-api-blog/config"
+	"github.com/adnanahmady/go-rest-api-blog/pkg/app"
 	"github.com/rs/zerolog"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -33,7 +34,7 @@ func NewLog(cfg *config.Config) *AppLog {
 	writers[0] = zerolog.ConsoleWriter{Out: os.Stdout}
 	writers[1] = &lumberjack.Logger{
 		Filename: filepath.Join(
-			cfg.Log.Dir,
+			filepath.Join(app.GetRootPath(), cfg.Log.Dir),
 			fmt.Sprintf("request-%s.log", time.Now().Format("2006-01-02")),
 		),
 		MaxSize:  3000, // 3GB

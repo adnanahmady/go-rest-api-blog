@@ -3,8 +3,8 @@ package config
 import (
 	"errors"
 	"log"
-	"os"
 
+	"github.com/adnanahmady/go-rest-api-blog/pkg/app"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
@@ -29,23 +29,19 @@ func GetConfig() *Config {
 }
 
 func loadDotEnvFile() {
-	if err := godotenv.Load(getCallerPath() + "/.env"); err != nil {
+	root := app.GetRootPath()
+	if err := godotenv.Load(
+		root + "/.env.testing",
+		root + "/.env",
+	); err != nil {
 		log.Fatalf("failed to load .env file: %v", err)
 	}
-}
-
-func getCallerPath() string {
-	currentPath, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("failed to get current path: %v", err)
-	}
-	return currentPath
 }
 
 func readConfigFile() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
-	viper.AddConfigPath(getCallerPath())
+	viper.AddConfigPath(app.GetRootPath())
 
 	if err := viper.ReadInConfig(); err != nil {
 		if errors.Is(err, viper.ConfigFileNotFoundError{}) {

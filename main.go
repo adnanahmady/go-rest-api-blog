@@ -19,13 +19,19 @@ func main() {
 		log.Fatalf("failed to wire up app: %v", err)
 	}
 	defer app.Database.Close()
-
 	app.Database.Migrate()
 
-	// TODO: Set up repository, use cases, and HTTP server...
+	go func() {
+		if err := app.Server.Start(); err != nil {
+			log.Fatalf("failed to start server: %v", err)
+		}
+	}()
 
 	<-ctx.Done()
 	stop()
 
-	// TODO: Shutdown logic...
+	if err := app.Server.Shutdown(); err != nil {
+		log.Fatalf("failed to shutdown server: %v", err)
+	}
+	app.Logger.Info("application shutdown completed")
 }

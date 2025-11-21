@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/adnanahmady/go-rest-api-blog/config"
+	"github.com/adnanahmady/go-rest-api-blog/pkg/app"
 	"github.com/adnanahmady/go-rest-api-blog/pkg/applog"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -46,11 +47,10 @@ func (m *DatabaseManagerImpl) Close() error {
 }
 
 func (m *DatabaseManagerImpl) Migrate() error {
-	mgr, err := migrate.New(
-		"file://migrations",
-		fmt.Sprintf("sqlite3://%s", m.cfg.Database.Path),
-	)
+	migrations := fmt.Sprintf("file://%s/migrations", app.GetRootPath())
+	database := fmt.Sprintf("sqlite3://%s", m.cfg.Database.Path)
 
+	mgr, err := migrate.New(migrations, database)
 	if err != nil {
 		m.lgr.Fatal("failed to create migration manager", err)
 		return err
