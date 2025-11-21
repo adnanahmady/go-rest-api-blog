@@ -28,4 +28,4 @@ make test
 You can check the swagger of the app using
 `http://0.0.0.0:5000/swagger/index.html#/` url.
 
-![swagger](.asserts/swagger.json "Swagger")
+![swagger](.assets/swagger.png "Swagger")
