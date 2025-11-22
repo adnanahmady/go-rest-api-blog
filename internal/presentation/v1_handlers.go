@@ -40,9 +40,9 @@ func NewV1Handlers(
 // @Summary Health check
 // @Description Health check
 // @Tags health
-// @Accept json
-// @Produce json
-// @Success 200 {object} response.JsonResponse{data=string}
+// @Accept text/plain
+// @Produce text/plain
+// @Success 200 {string} OK "OK"
 // @Failure 500 {object} errs.AppError
 // @Router /health [get]
 func (h *V1Handlers) HealthCheck(w http.ResponseWriter, r *http.Request) {

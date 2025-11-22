@@ -58,6 +58,25 @@ info:
   title: Go Rest API Blog
   version: 1.0.0
 paths:
+  /health:
+    get:
+      consumes:
+      - text/plain
+      description: Health check
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errs.AppError'
+      summary: Health check
+      tags:
+      - health
   /posts:
     get:
       consumes:
