@@ -28,23 +28,14 @@ func (r *SqlitePostRepository) Create(
 ) error {
 	lgr := request.GetLogger(ctx)
 
-	var dbName string
-	err := r.dbm.GetClient().GetContext(ctx, &dbName, `
-	PRAGMA database_list; select name from pragma_database_list limit 1`)
-	if err != nil {
-		lgr.Error("failed to get database name", err)
-		return err
-	}
-	lgr.Info("database name", "database", dbName)
 	query := `INSERT INTO posts (title, content, created_at, updated_at)
 	VALUES (:title, :content, :created_at, :updated_at)`
-
-	_, err = r.dbm.GetClient().NamedExecContext(ctx, query, post)
+	_, err := r.dbm.GetClient().NamedExecContext(ctx, query, post)
 	if err != nil {
 		lgr.Error("failed to create post", err)
 		return err
 	}
-	lgr.Info("post created successfully")
+
 	return nil
 }
 
@@ -52,13 +43,17 @@ func (r *SqlitePostRepository) GetByID(
 	ctx context.Context,
 	id uint,
 ) (*domain.Post, error) {
+	lgr := request.GetLogger(ctx)
+
 	var post domain.Post
 	query := `SELECT * FROM posts WHERE id = ?`
 	err := r.dbm.GetClient().GetContext(ctx, &post, query, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
+			lgr.Warn("post not found", err)
 			return nil, domain.ErrPostNotFound
 		}
+		lgr.Error("failed to get post by id", err)
 		return nil, err
 	}
 	return &post, nil
@@ -68,34 +63,44 @@ func (r *SqlitePostRepository) Update(
 	ctx context.Context,
 	post *domain.Post,
 ) error {
+	lgr := request.GetLogger(ctx)
+
 	query := `UPDATE posts SET title = :title, content = :content,
 		updated_at = :updated_at WHERE id = :id`
 	_, err := r.dbm.GetClient().NamedExecContext(ctx, query, post)
 	if err != nil {
+		lgr.Error("failed to update post", err)
 		return err
 	}
-	return err
+
+	return nil
 }
 
 func (r *SqlitePostRepository) Delete(
 	ctx context.Context, id uint,
 ) error {
+	lgr := request.GetLogger(ctx)
+
 	query := `DELETE FROM posts WHERE id = ?`
 	_, err := r.dbm.GetClient().ExecContext(ctx, query, id)
 	if err != nil {
+		lgr.Error("failed to delete post", err)
 		return err
 	}
-	return err
+	return nil
 }
 
 func (r *SqlitePostRepository) GetPaginated(
 	ctx context.Context,
 	page, perPage int,
 ) ([]*domain.Post, int, error) {
+	lgr := request.GetLogger(ctx)
+
 	var posts []*domain.Post
 	query := `SELECT * FROM posts LIMIT ? OFFSET ?`
 	err := r.dbm.GetClient().Select(&posts, query, perPage, (page-1)*perPage)
 	if err != nil {
+		lgr.Error("failed to get paginated posts", err)
 		return nil, 0, err
 	}
 
@@ -103,6 +108,7 @@ func (r *SqlitePostRepository) GetPaginated(
 	query = `SELECT COUNT(*) as total FROM posts LIMIT ? OFFSET ?`
 	err = r.dbm.GetClient().GetContext(ctx, &total, query, perPage, (page-1)*perPage)
 	if err != nil {
+		lgr.Error("failed to get total posts", err)
 		return nil, 0, err
 	}
 	return posts, total, nil

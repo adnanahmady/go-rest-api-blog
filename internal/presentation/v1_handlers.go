@@ -37,6 +37,19 @@ func NewV1Handlers(
 	}
 }
 
+// @Summary Health check
+// @Description Health check
+// @Tags health
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.JsonResponse{data=string}
+// @Failure 500 {object} errs.AppError
+// @Router /health [get]
+func (h *V1Handlers) HealthCheck(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
+}
+
 // @Summary Create a new post
 // @Description Create a new post
 // @Tags posts

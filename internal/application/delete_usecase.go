@@ -32,8 +32,10 @@ func (uc *DeletePostUseCaseImpl) Delete(
 		}
 		return err
 	}
+
 	if err := uc.repo.Delete(ctx, id); err != nil {
 		return err
 	}
+
 	return nil
 }

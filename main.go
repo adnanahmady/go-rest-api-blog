@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"log"
 	"os/signal"
 	"syscall"
 
@@ -24,14 +23,14 @@ func main() {
 
 	app, err := internal.WireUpApp()
 	if err != nil {
-		log.Fatalf("failed to wire up app: %v", err)
+		app.Logger.Fatal("failed to wire up app", err)
 	}
 	defer app.Database.Close()
 	app.Database.Migrate()
 
 	go func() {
 		if err := app.Server.Start(); err != nil {
-			log.Fatalf("failed to start server: %v", err)
+			app.Logger.Fatal("failed to start server", err)
 		}
 	}()
 
@@ -39,7 +38,7 @@ func main() {
 	stop()
 
 	if err := app.Server.Shutdown(); err != nil {
-		log.Fatalf("failed to shutdown server: %v", err)
+		app.Logger.Fatal("failed to shutdown server", err)
 	}
 	app.Logger.Info("application shutdown completed")
 }

@@ -28,6 +28,7 @@ func (uc *ListPostsUseCaseImpl) List(
 	if err != nil {
 		return nil, err
 	}
+
 	collection := make([]*PostDTO, len(posts))
 	for i, post := range posts {
 		collection[i] = newPostDTO(post)
